@@ -13,7 +13,11 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
 LOCAL_PACKAGE_NAME := DSPManager
 
-LOCAL_OVERRIDES_PACKAGES := MusicFX
+LOCAL_OVERRIDES_PACKAGES := MusicFX AudioFX
+
+LOCAL_PRIVILEGED_MODULE := true
+
+LOCAL_CERTIFICATE := platform
 
 include $(BUILD_PACKAGE)
 

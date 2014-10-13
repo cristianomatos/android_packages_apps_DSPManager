@@ -54,9 +54,12 @@ public class HeadsetService extends Service {
         private final Virtualizer mVirtualizer;
         /** Session-specific stereo widener */
         private final StereoWide mStereoWide;
+        /** Session-specific dirac */
+        public final DiracFX mDirac;
 
         protected EffectSet(int sessionId) {
             try {
+                mDirac = new DiracFX(0, sessionId);
                 mCompression = new AudioEffect(EFFECT_TYPE_VOLUME,
                         AudioEffect.EFFECT_TYPE_NULL, 0, sessionId);
             } catch (IllegalArgumentException e) {
@@ -77,6 +80,7 @@ public class HeadsetService extends Service {
             mBassBoost.release();
             mVirtualizer.release();
             mStereoWide.release();
+            mDirac.release();
         }
     }
 
@@ -331,6 +335,13 @@ public class HeadsetService extends Service {
             session.mStereoWide.setStrength(Short.valueOf(prefs.getString("dsp.stereowide.mode", "0")));
         } catch (Exception e) {
             Log.e(TAG, "Error enabling stereo wide!");
+        }
+
+        try {
+            session.mDirac.setEnabled(prefs.getBoolean("dsp.dirac.enable", false));
+            session.mDirac.setFactorLevel(prefs.getInt("dsp.dirac.mode", 0));
+        } catch (Exception e) {
+            Log.e(TAG, "Error enabling dirac!", e);
         }
     }
 }
